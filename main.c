@@ -30,15 +30,9 @@ int main(int argc, char **argv)
 	for (argi = 1; --argc; ++argi)
 		if (argv[argi][0] == '-')
 			switch (argv[argi][1] == '-' ?
-			          arrin(&argv[argi][2], 3, "verbose", "file", "output")
+			          arrin(&argv[argi][2], 2, "verbose", "file")
 			        : (int)argv[argi][1] | main_ISCHAR)
 			{
-			case -1:
-			/* unknown option */
-				warn(WL_warn, "qsim", "Unknown option \"%a\" provided, ignoring.\n", argv[argi]);
-
-				break;
-
 			case 0:
 			case (int)'v' | main_ISCHAR:
 			/* toggle verbose */
@@ -56,21 +50,9 @@ int main(int argc, char **argv)
 
 				break;
 
-			case 2:
-			case (int)'o' | main_ISCHAR:
-			/* output file */
-				if (argc == 1)
-					warn(WL_fail, "qsim", "No file provided after (-o|--output).\n");
-				else {
-					FILE *out;
-
-					if ((out = fopen(argv[++argi], "w")) == NULL)
-						warn(WL_fail, "qsim", "Could not open output file \"%a\" for writing.\n", argv[argi]);
-					/*
-					else
-						fclose(stdout), stdout = out;
-					*/
-				}
+			default:
+			/* unknown option */
+				warn(WL_warn, "qsim", "Unknown option \"%a\" provided, ignoring.\n", argv[argi]);
 
 				break;
 			}
